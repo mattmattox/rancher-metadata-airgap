@@ -1,6 +1,9 @@
 # rancher-metadata-airgap
 A simple pod for publishing the Rancher metadata.json in an airgap setup.
 
+## Build status
+[![Build Status](https://drone.support.tools/api/badges/mattmattox/rancher-metadata-airgap/status.svg)](https://drone.support.tools/mattmattox/rancher-metadata-airgap)
+
 ## Installation
 
 NOTE: This should deployed on the Rancher Local cluster
