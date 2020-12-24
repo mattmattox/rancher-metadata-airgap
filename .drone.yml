@@ -33,7 +33,7 @@ steps:
       kubernetes_token:
         from_secret: k8s_token
     commands:
-      - kubectl create ns rancher-metadata-${DRONE_BUILD_NUMBER} --v=9
+      - kubectl create ns rancher-metadata-${DRONE_BUILD_NUMBER}
       - kubectl annotate ns rancher-metadata-${DRONE_BUILD_NUMBER} field.cattle.io/projectId=c-96c7n:p-bhzsr
       - kubectl label ns rancher-metadata-${DRONE_BUILD_NUMBER} ns-purge=true
       - kubectl apply -n rancher-metadata-${DRONE_BUILD_NUMBER} -f ./deploy-ready/
