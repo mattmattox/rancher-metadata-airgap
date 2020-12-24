@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rancher-metadata-airgap
+  name: rancher-metadata-airgap
+  namespace: cattle-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rancher-metadata-airgap
+  template:
+    metadata:
+      labels:
+        app: rancher-metadata-airgap
+    spec:
+      containers:
+      - image: cube8021/rancher-metadata-airgap:v0.1-rc1
+        imagePullPolicy: IfNotPresent
+        name: rancher-metadata-airgap
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
