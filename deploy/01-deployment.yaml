@@ -16,7 +16,7 @@ spec:
         app: rancher-metadata-airgap
     spec:
       containers:
-      - image: cube8021/rancher-metadata-airgap:v0.1-rc1
+      - image: cube8021/rancher-metadata-airgap:latest
         imagePullPolicy: IfNotPresent
         name: rancher-metadata-airgap
         livenessProbe:

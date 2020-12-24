@@ -1,0 +1,39 @@
+---
+kind: pipeline
+type: kubernetes
+name: Rancher-Metadata-Airgap
+
+steps:
+  - name: build-docker
+    image: plugins/docker
+    settings:
+      repo: cube8021/rancher-metadata-airgap
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: docker-username
+      password:
+        from_secret: docker-password
+
+  - name: customize-kube-files
+    image: supporttools/kube-builder
+    pull: true
+    environment:
+      APPENV: ${DRONE_COMMIT_BRANCH}
+    commands:
+      - bash ./deploy.sh
+
+  - name: deploy-to-k8s
+    image: cube8021/drone-kubectl
+    settings:
+      kubernetes_server:
+        from_secret: k8s_server
+      kubernetes_token:
+        from_secret: k8s_token
+    commands:
+      - kubectl create ns rancher-metadata-airgap-${DRONE_BUILD_NUMBER}
+      - kubectl annotate ns rancher-metadata-airgap-${DRONE_BUILD_NUMBER} field.cattle.io/projectId=c-96c7n:p-bhzsr
+      - kubectl label ns rancher-metadata-airgap-${DRONE_BUILD_NUMBER} ns-purge=true
+      - kubectl apply -n rancher-metadata-airgap-${DRONE_BUILD_NUMBER} -f ./deploy-ready/
